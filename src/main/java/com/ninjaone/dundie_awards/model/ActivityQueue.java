@@ -9,13 +9,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @Component
 public class ActivityQueue {
 
-    private final Queue<Activity> activityQueue = new ConcurrentLinkedQueue<>();
+    private final Queue<AwardMessage> activityQueue = new ConcurrentLinkedQueue<>();
 
-    public void addMessage(Activity event) {
+    public void addMessage(AwardMessage event) {
         activityQueue.add(event);
     }
 
-    public Activity getNextMessage() {
+    public AwardMessage getNextMessage() {
         return activityQueue.poll();
     }
 
@@ -24,6 +24,6 @@ public class ActivityQueue {
     }
 
     public List<Activity> getQueue() {
-        return activityQueue.stream().toList();
+        return activityQueue.stream().map(AwardMessage::activity).toList();
     }
 }

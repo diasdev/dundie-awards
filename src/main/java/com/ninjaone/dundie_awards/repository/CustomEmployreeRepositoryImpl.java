@@ -2,11 +2,13 @@ package com.ninjaone.dundie_awards.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
-public class CustomEmployreeRepositoryImpl<T> implements CustomEmployreeRepository<T> {
+@Repository
+public class CustomEmployreeRepositoryImpl implements CustomEmployreeRepository {
     private final EntityManager entityManager;
 
     public CustomEmployreeRepositoryImpl(EntityManager entityManager) {

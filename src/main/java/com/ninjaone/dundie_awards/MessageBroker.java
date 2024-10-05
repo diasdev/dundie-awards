@@ -2,6 +2,7 @@ package com.ninjaone.dundie_awards;
 
 import com.ninjaone.dundie_awards.model.Activity;
 import com.ninjaone.dundie_awards.model.ActivityQueue;
+import com.ninjaone.dundie_awards.model.AwardMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -18,12 +19,12 @@ public class MessageBroker {
         this.activityQueue = activityQueue;
     }
 
-    public void sendMessage(Activity message) {
+    public void sendMessage(AwardMessage message) {
         activityQueue.addMessage(message);
         logger.info("Message sent: " + message);
     }
 
-    public Activity getMessage() {
+    public AwardMessage getMessage() {
         return activityQueue.getNextMessage();
     }
 
