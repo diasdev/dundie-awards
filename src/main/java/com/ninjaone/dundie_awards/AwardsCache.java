@@ -7,15 +7,22 @@ import org.springframework.stereotype.Component;
 public class AwardsCache {
     private int totalAwards;
 
-    public void setTotalAwards(int totalAwards) {
+    public synchronized void setTotalAwards(int totalAwards) {
         this.totalAwards = totalAwards;
     }
 
-    public int getTotalAwards(){
+    public int getTotalAwards() {
         return totalAwards;
     }
 
-    public void addOneAward(){
+    public synchronized void addOneAward() {
         this.totalAwards += 1;
+    }
+
+    public synchronized void removeAwards(int awardsRemoved) {
+        if (this.totalAwards < awardsRemoved) {
+            throw new IllegalArgumentException("Cannot remove more awards than are available");
+        }
+        this.totalAwards -= awardsRemoved;
     }
 }
