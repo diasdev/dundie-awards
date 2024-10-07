@@ -1,8 +1,6 @@
 package com.ninjaone.dundie_awards.service;
 
 import com.ninjaone.dundie_awards.AwardsCache;
-import com.ninjaone.dundie_awards.model.Activity;
-import com.ninjaone.dundie_awards.model.AwardMessage;
 import com.ninjaone.dundie_awards.model.AwardsRollbackData;
 import com.ninjaone.dundie_awards.model.AwardsRollbackEvent;
 import com.ninjaone.dundie_awards.repository.EmployeeRepository;
@@ -14,20 +12,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class AwardRollbackService {
+public class AwardsRollbackService {
     private final EmployeeRepository employeeRepository;
     private final AwardsCache awardsCache;
 
-    public AwardRollbackService(EmployeeRepository employeeRepository, AwardsCache awardsCache) {
+    public AwardsRollbackService(EmployeeRepository employeeRepository, AwardsCache awardsCache) {
         this.employeeRepository = employeeRepository;
         this.awardsCache = awardsCache;
     }
 
-    public AwardMessage buildMessage(Activity activity, long orgId, int numberOfAwards) {
-        return new AwardMessage(activity, buildRollbackData(orgId, numberOfAwards));
-    }
-
-    private AwardsRollbackData buildRollbackData(long orgId, int numberOfAwards) {
+    public AwardsRollbackData buildRollbackData(long orgId, int numberOfAwards) {
         Map<String, Object> params = new HashMap<>();
         params.put("orgId", orgId);
         params.put("numberOfAwards", numberOfAwards);

@@ -1,7 +1,7 @@
 package com.ninjaone.dundie_awards.service;
 
 import com.ninjaone.dundie_awards.MessageBroker;
-import com.ninjaone.dundie_awards.model.AwardMessage;
+import com.ninjaone.dundie_awards.model.AwardsEventMessage;
 import com.ninjaone.dundie_awards.repository.ActivityRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,30 +15,30 @@ public class ActivityService {
 
     private final ActivityRepository activityRepository;
     private final MessageBroker messageBroker;
-    private final AwardEventService awardEventService;
+    private final AwardsEventService awardsEventService;
 
-    public ActivityService(ActivityRepository activityRepository, MessageBroker messageBroker, AwardEventService awardEventService) {
+    public ActivityService(ActivityRepository activityRepository, MessageBroker messageBroker, AwardsEventService awardsEventService) {
         this.activityRepository = activityRepository;
         this.messageBroker = messageBroker;
-        this.awardEventService = awardEventService;
+        this.awardsEventService = awardsEventService;
     }
 
     @Async
     @Scheduled(fixedRate = 3_000L)
     public void pollQueue() {
-        AwardMessage message = messageBroker.getMessage();
+        AwardsEventMessage message = messageBroker.getMessage();
         if (message != null) {
             processMessage(message);
         }
     }
 
-    private void processMessage(AwardMessage message) {
+    private void processMessage(AwardsEventMessage message) {
         try {
             activityRepository.save(message.activity());
             logger.info("Activity processed");
         } catch (Exception e) {
             logger.error("Exception occurred. Rollback of original operation will be perform.", e);
-            awardEventService.publishRollbackEvent(e.getMessage(), message.rollbackData());
+            awardsEventService.publishRollbackEvent(e.getMessage(), message.rollbackData());
         }
     }
 }

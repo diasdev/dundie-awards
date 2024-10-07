@@ -5,11 +5,13 @@ import com.ninjaone.dundie_awards.model.Organization;
 import com.ninjaone.dundie_awards.repository.EmployeeRepository;
 import com.ninjaone.dundie_awards.repository.OrganizationRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
 @Component
+@Profile("!test")
 public class DataLoader implements CommandLineRunner {
 
     private final EmployeeRepository employeeRepository;

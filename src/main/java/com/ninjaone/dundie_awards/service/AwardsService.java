@@ -15,12 +15,12 @@ import java.util.Objects;
 @Service
 public class AwardsService {
     private final EmployeeRepository employeeRepository;
-    private final AwardEventService awardEventService;
+    private final AwardsEventService awardsEventService;
     private final AwardsCache awardsCache;
 
-    public AwardsService(EmployeeRepository employeeRepository, AwardEventService awardEventService, AwardsCache awardsCache) {
+    public AwardsService(EmployeeRepository employeeRepository, AwardsEventService awardsEventService, AwardsCache awardsCache) {
         this.employeeRepository = employeeRepository;
-        this.awardEventService = awardEventService;
+        this.awardsEventService = awardsEventService;
         this.awardsCache = awardsCache;
     }
 
@@ -32,13 +32,15 @@ public class AwardsService {
             throw new EmployeeNotFoundException(String.format("No employees of organization with id %s were found", orgId));
         }
 
+        // Could use update command here, but this is more readable
+        // With update command the cache increment could be done in one operation as well
         for (Employee employee : orgEmployees) {
             employee.setDundieAwards(Objects.requireNonNullElse(employee.getDundieAwards(), 0) + 1);
             awardsCache.addOneAward();
         }
 
         Activity activity = new Activity(LocalDateTime.now(), "Awards given to all employees in organization with id " + orgId);
-        awardEventService.sendEvent(activity, orgId, orgEmployees.size());
+        awardsEventService.sendEvent(activity, orgId, orgEmployees.size());
 
         return activity;
     }

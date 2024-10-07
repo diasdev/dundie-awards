@@ -2,7 +2,7 @@ package com.ninjaone.dundie_awards;
 
 import com.ninjaone.dundie_awards.model.Activity;
 import com.ninjaone.dundie_awards.model.ActivityQueue;
-import com.ninjaone.dundie_awards.model.AwardMessage;
+import com.ninjaone.dundie_awards.model.AwardsEventMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ public class MessageBroker {
         this.activityQueue = activityQueue;
     }
 
-    public void sendMessage(AwardMessage message) {
+    public void sendMessage(AwardsEventMessage message) {
         if (message == null) {
             throw new IllegalArgumentException("Message cannot be null");
         }
@@ -28,7 +28,7 @@ public class MessageBroker {
         logger.info("Message sent");
     }
 
-    public AwardMessage getMessage() {
+    public AwardsEventMessage getMessage() {
         return activityQueue.getNextMessage();
     }
 

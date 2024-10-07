@@ -1,25 +1,21 @@
 package com.ninjaone.dundie_awards.controller;
 
 import com.ninjaone.dundie_awards.model.Activity;
-import com.ninjaone.dundie_awards.model.Employee;
-import com.ninjaone.dundie_awards.repository.EmployeeRepository;
 import com.ninjaone.dundie_awards.service.AwardsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
-public class AwardController {
+public class AwardsController {
     private final AwardsService awardsService;
-    public AwardController(AwardsService awardsService) {
+    public AwardsController(AwardsService awardsService) {
         this.awardsService = awardsService;
     }
 
-    @PostMapping("/award/{OrgId}")
-    public ResponseEntity<Activity> awardEmployee(@PathVariable long OrgId) {
-        return ResponseEntity.ok(awardsService.giveAward(OrgId));
+    @PostMapping("/give-dundie-awards/{organizationId}")
+    public ResponseEntity<Activity> awardEmployee(@PathVariable long organizationId) {
+        return ResponseEntity.ok(awardsService.giveAward(organizationId));
     }
 }
