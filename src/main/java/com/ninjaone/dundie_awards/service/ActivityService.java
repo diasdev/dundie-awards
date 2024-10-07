@@ -2,13 +2,9 @@ package com.ninjaone.dundie_awards.service;
 
 import com.ninjaone.dundie_awards.MessageBroker;
 import com.ninjaone.dundie_awards.model.AwardMessage;
-import com.ninjaone.dundie_awards.model.AwardsRollbackData;
-import com.ninjaone.dundie_awards.model.AwardsRollbackEvent;
 import com.ninjaone.dundie_awards.repository.ActivityRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -19,13 +15,12 @@ public class ActivityService {
 
     private final ActivityRepository activityRepository;
     private final MessageBroker messageBroker;
+    private final AwardEventService awardEventService;
 
-    @Autowired
-    private ApplicationEventPublisher applicationEventPublisher;
-
-    public ActivityService(ActivityRepository activityRepository, MessageBroker messageBroker) {
+    public ActivityService(ActivityRepository activityRepository, MessageBroker messageBroker, AwardEventService awardEventService) {
         this.activityRepository = activityRepository;
         this.messageBroker = messageBroker;
+        this.awardEventService = awardEventService;
     }
 
     @Async
@@ -39,18 +34,11 @@ public class ActivityService {
 
     private void processMessage(AwardMessage message) {
         try {
-            //activityRepository.save(message.activity());
+            activityRepository.save(message.activity());
             logger.info("Activity processed");
-            throw new Exception("Exception occurred");
         } catch (Exception e) {
             logger.error("Exception occurred. Rollback of original operation will be perform.", e);
-            publishRollbackEvent(e.getMessage(), message.rollbackData());
+            awardEventService.publishRollbackEvent(e.getMessage(), message.rollbackData());
         }
-    }
-
-    private void publishRollbackEvent(String errorMessage, AwardsRollbackData rollbackData) {
-        applicationEventPublisher.publishEvent(new AwardsRollbackEvent(rollbackData, errorMessage));
-
-        logger.info("Rollback Message published");
     }
 }

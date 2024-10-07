@@ -20,8 +20,12 @@ public class MessageBroker {
     }
 
     public void sendMessage(AwardMessage message) {
+        if (message == null) {
+            throw new IllegalArgumentException("Message cannot be null");
+        }
+
         activityQueue.addMessage(message);
-        logger.info("Message sent: " + message);
+        logger.info("Message sent");
     }
 
     public AwardMessage getMessage() {
